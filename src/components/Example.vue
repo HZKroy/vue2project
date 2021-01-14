@@ -1,16 +1,16 @@
 <template>
-  <div id="example">
+  <div class="example">
   </div>
 </template>
 
 <script>
-export default {
-  name: 'Example',
-  props: {
-  },
-  components:{
+  export default {
+    name: 'Example',
+    props: {
+    },
+    components:{
+    }
   }
-}
 </script>
 
 <style scoped>

@@ -14,7 +14,7 @@ export default {
     }
   },
   props: {
-    path:String
+    path:String 
   },
   computed:{
     isActive(){

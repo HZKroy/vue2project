@@ -1,1 +1,92 @@
-111
+git提交流程
+
+currentIndex
+
+display:flex;
+flex:1;
+
+粘性position:sticky
+
+slot用div包裹，在div上添加属性；否则slot整个会被替换
+
+轮播图:v-for只有第一张,单独取却可以
+
+goods:{
+  'pop':{page:5,list:[150]},
+  'new':{page:2,list:[60]},
+  'sell':{page:1,list:[30]}
+}
+
+props父子通信 (home)->(goodsList:goods)->v-for(goodsListItem:goodsItem)~~~
+
+flex布局：一行排两个：
+子组件设置宽度48%，flex-wrap: wrap;justify-content: space-around;
+
+css的伪类？？？
+
+内部点击向外部发射数据,根据内部点击外部请求不同数据
+
+原生scroll ：overflow-y:scroll;
+超出部分自动隐藏并可以滚动
+better-scroll:
+  import BS from 'better-scroll'
+  let bs = new BS(document.querySelector('.wrapper'),{
+    probeType:3，
+    //probe:侦测；
+    //0,1：不侦测实时位置
+    //2：手指滚动时侦，测惯性不会侦测
+    //3：只要在滚动就会侦测
+    click:true,
+    //BS默认阻止click事件
+    pullUpLoad:true,
+    //上拉加载更多
+  })
+  bs.on('scroll',(position) => {
+    console.log(position)
+  })
+  bs.on('pullingUp',() => {
+        console.log('pullingUp')
+        setTimeout(() => {
+          bs.finishPullUp()//调用此函数后才能再次下拉加载更多
+        },1000)
+      })
+
+ref="aaa"
+this.$refs.aaa拿到元素或者组件
+
+scoped:样式只会针对当前组件
+监听组件的点击必须使用：@click.native="...",加上.native修饰符
+
+this.$refs.scroll:拿到组件对象
+this.$refs.scroll.scroll：拿到组件对象中的数据scroll，也就是scroll实例
+this.$refs.scroll.scroll.scrollTo(0,0,500)：调用scroll的方法  :回到顶部，500ms内
+
+
+监听scroll滚动数据，点击完成回到顶部：
+scroll组件调用scroll方法，$emit('scroll',position)向父组件发射position数据
+
+bs决定区域滚动是通过scrollHeight属性决定的，刚开始加载图片时没有计算在内，图片进来后高度增加，导致滚动出现bug
+监听图片加载@load=""，每当一张图片加载完成就执行一次refresh()
+
+事件总线：管理事件
+this.$bus.$emit('aaaa')
+this.$bus.$on('aaaa',()=>{
+
+})
+在main.js中给Vue添加原型，完成$bus的作用
+Vue.prototype.$bus = new Vue()
+
+//函数防抖
+      debounce(func,delay){
+        let timer = null
+        return function(...args){
+          if(timer){
+            clearTimeout(timer)
+          }
+          timer=setTimeout(()=>{
+            func.apply(this,args)
+          },delay)
+        }
+      }
+
+所有组件都有$el的属性，用于获取组件中的元素
