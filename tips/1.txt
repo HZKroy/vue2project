@@ -90,3 +90,5 @@ Vue.prototype.$bus = new Vue()
       }
 
 所有组件都有$el的属性，用于获取组件中的元素
+
+用假的tabControl代替真的tabControl

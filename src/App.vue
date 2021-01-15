@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <router-view></router-view>
-    <my-tabbar></my-tabbar>
+    <keep-alive exclude="Detail">
+      <router-view></router-view>
+    </keep-alive>
+    <my-tabbar v-show="isTabbarActive"></my-tabbar>
   </div>
 </template>
 
@@ -13,6 +15,11 @@
     name: 'App',
     data(){
       return {
+      }
+    },
+    computed:{
+      isTabbarActive(){
+        return this.$route.path.indexOf('detail')===-1
       }
     },
     components:{

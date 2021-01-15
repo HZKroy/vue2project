@@ -60,6 +60,11 @@
       },
       finishPullUp(){
         this.scroll && this.scroll.finishPullUp()
+      },
+      getScrollY(){
+        if(this.scroll){
+          this.scroll.y
+        }
       }
     }
   }

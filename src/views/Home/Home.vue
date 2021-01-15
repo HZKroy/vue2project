@@ -3,8 +3,9 @@
     <navbar class="home-navbar">
       <div slot="center">购物街</div>
     </navbar>
+    <tab-control class="tab-control-f" ref="tabControlF" :titles="['流行','新款','精选']" @tabClick="tabClick" v-show="isTabFixed"></tab-control>
     <scroll class="scroll" ref="scroll" :probe-type="3" :pull-up-load="true" @scroll="scroll" @pullingUp="pullingUp">
-      <home-swiper :banners="banners"></home-swiper>
+      <home-swiper :banners="banners" @swiperImgLoad="swiperImgLoad"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
       <tab-control ref="tabControl" :titles="['流行','新款','精选']" @tabClick="tabClick"></tab-control>
@@ -44,7 +45,9 @@
         },
         currentType:'pop',
         isShowBackTop:false,
-        tabOffsetTop:0
+        tabOffsetTop:0,
+        isTabFixed:false,
+        saveY:0
       }
     },
     props: {
@@ -92,6 +95,8 @@
             this.currentType = 'sell'
             break
         }
+        this.$refs.tabControl.currentIndex = index
+        this.$refs.tabControlF.currentIndex = index
       },
       //监听回到顶部按钮的点击
       backTopClick(){
@@ -101,12 +106,17 @@
       scroll(position){
         // console.log(position)
         this.isShowBackTop = -position.y>1000
+        this.isTabFixed = -position.y > this.tabOffsetTop
       },
       //监听子组件发射的上拉加载
       pullingUp(){
         // console.log("上拉加载")
         this.getHomeGoodsM(this.currentType)
         this.$refs.scroll.refresh()
+      },
+      //监听轮播图每一张图片加载完成
+      swiperImgLoad(){
+        this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
       }
     },   
     created(){
@@ -123,30 +133,41 @@
       })
       //获取tabControl的offset
       this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+    },
+    actived(){
+      this.$refs.scroll.scrollTo(0,this.saveY,0)
+      this.$refs.scroll.refresh()
+    },
+    deactivated(){
+      this.saveY = this.$refs.scroll.getScrollY
     }
   }
 </script>
 
 <style scoped>
   #home{
-    padding-top: 44px;
+    /* padding-top: 44px; */
     height: 100vh;
     position: relative;
   }
   .home-navbar{
     background-color: rgb(219, 26, 116);
     color: white;
-    position: fixed;
+    /* position: fixed;
     left: 0;
     right: 0;
     top: 0;
-    z-index: 10;
+    z-index: 10; */
   }
   .scroll{
     overflow: hidden;
     position: absolute;
     top: 44px;
     bottom: 49px;
+  }
+  .tab-control-f{
+    position: relative;
+    z-index: 100;
   }
   
 </style>
